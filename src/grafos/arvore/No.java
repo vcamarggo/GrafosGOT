@@ -5,11 +5,11 @@ import java.util.List;
 
 /**
  * @author V.Camargo
- * 
+ *
  * @Date 13 de mai de 2016
  */
-
 public class No {
+
     public static List<No> todosNos = new ArrayList<No>();
     private String nome;
     private List<No> adjacentes;
@@ -25,9 +25,9 @@ public class No {
 
     public No(int id, String nome) {
 
-	this.nome = nome;
-	this.id = id;
-	this.adjacentes = new ArrayList<No>();
+        this.nome = nome;
+        this.id = id;
+        this.adjacentes = new ArrayList<No>();
         this.filhos = new ArrayList<No>();
     }
 
@@ -40,201 +40,237 @@ public class No {
     }
 
     public int getId() {
-	return id;
+        return id;
     }
 
     public int getLow() {
-	return low;
+        return low;
     }
 
     public void setLow(int low) {
-	this.low = low;
+        this.low = low;
     }
+
     public void addFilho(No no) {
-	if (adjacentes == null) {
-	    adjacentes = new ArrayList<No>();
-	}
-	adjacentes.add(no);
+        if (adjacentes == null) {
+            adjacentes = new ArrayList<No>();
+        }
+        adjacentes.add(no);
     }
 
     public String getNome() {
-	return nome;
+        return nome;
     }
 
     public List<No> getAdjacentes() {
-	return adjacentes;
+        return adjacentes;
     }
 
     public Cor getCor() {
-	return cor;
+        return cor;
     }
 
     public void setCor(Cor cor) {
-	this.cor = cor;
+        this.cor = cor;
     }
 
     public No getPai() {
-	return pai;
+        return pai;
     }
 
     public void setPai(No pai) {
-	this.pai = pai;
+        this.pai = pai;
     }
 
     public int getTempoInicio() {
-	return tempoInicio;
+        return tempoInicio;
     }
 
     public void setTempoInicio(int tempoInicio) {
-	this.tempoInicio = tempoInicio;
+        this.tempoInicio = tempoInicio;
     }
 
     public int getTempoTermino() {
-	return tempoTermino;
+        return tempoTermino;
     }
 
     public void setTempoTermino(int tempoTermino) {
-	this.tempoTermino = tempoTermino;
+        this.tempoTermino = tempoTermino;
     }
 
     public int getDistancia() {
-	return distancia;
+        return distancia;
     }
 
     public void setDistancia(int distancia) {
-	this.distancia = distancia;
+        this.distancia = distancia;
     }
 
+    /**
+     * O( V + E )
+     * @param destino
+     * @return 
+     */
     public int buscaLargura(int destino) {
-	boolean achou = false;
-	int distancia = -1;
-	Fila fila = new Fila();
+        boolean achou = false;
+        int distancia = -1;
+        Fila fila = new Fila();
 
-	this.setCor(Cor.CINZA);
-	this.setDistancia(0);
-	fila.adiciona(this);
+        this.setCor(Cor.CINZA);
+        this.setDistancia(0);
+        fila.adiciona(this);
 
-	No n = fila.remove();
-	while (n != null && !achou) {
+        No n = fila.remove();
+        //O(V)
+        while (n != null && !achou) {
 
-	    for (No no : n.getAdjacentes()) {
+            //E
+            for (No no : n.getAdjacentes()) {
 
-		if (no.cor == Cor.BRANCO) {
-		    no.setCor(Cor.CINZA);
-		    no.setDistancia(n.getDistancia() + 1);
-		    fila.adiciona(no);
-		    if (no.id == destino) {
-			achou = true;
-			distancia = no.getDistancia();
-		    }
-		}
-	    }
+                if (no.cor == Cor.BRANCO) {
+                    no.setCor(Cor.CINZA);
+                    no.setDistancia(n.getDistancia() + 1);
+                    fila.adiciona(no);
+                    if (no.id == destino) {
+                        achou = true;
+                        distancia = no.getDistancia();
+                    }
+                }
+            }
 
-	    n.setCor(Cor.PRETO);
-	    n = fila.remove();
+            n.setCor(Cor.PRETO);
+            n = fila.remove();
 
-	}
+        }
 
-	return achou ? distancia : n.distancia;
+        return achou ? distancia : n.distancia;
     }
 
+    
+    /**
+     * O( V + E )
+     */
     public static void buscaProfundidade() {
-	for (No n : todosNos) {
-	    n.setCor(Cor.BRANCO);
-	    n.setPai(null);
-	}
-	tempo = 0;
-	for (No n : todosNos) {
-	    if (n.getCor() == Cor.BRANCO) {
-		distanciaVisita(n);
-	    }
-	}
+        //O(V)
+        for (No n : todosNos) {
+            n.setCor(Cor.BRANCO);
+            n.setPai(null);
+        }
+        tempo = 0;
+        
+        //O ( V )
+        for (No n : todosNos) {
+            if (n.getCor() == Cor.BRANCO) {
+                //O( E) 
+                distanciaVisita(n);
+            }
+        }
     }
 
+    /**
+     * O(E)
+     * @param n 
+     */
     private static void distanciaVisita(No n) {
-	tempo++;
-	n.setCor(Cor.CINZA);
-	n.setTempoInicio(tempo);
-	for (No no : n.getAdjacentes()) {
-	    if (no.getCor() == Cor.BRANCO) {
-		no.pai = n;
+        tempo++;
+        n.setCor(Cor.CINZA);
+        n.setTempoInicio(tempo);
+        //O(E)
+        for (No no : n.getAdjacentes()) {
+            if (no.getCor() == Cor.BRANCO) {
+                no.pai = n;
                 n.getFilhos().add(no);
-		distanciaVisita(no);
-	    }
-	}
-	n.setCor(Cor.PRETO);
-	tempo++;
-	n.setTempoTermino(tempo);
+                distanciaVisita(no);
+            }
+        }
+        n.setCor(Cor.PRETO);
+        tempo++;
+        n.setTempoTermino(tempo);
     }
 
+    /**
+     * O( V + E )
+     * @param n 
+     */
     public void pontes(No n) {
-	tempo++;
-	n.setCor(Cor.CINZA);
-	n.setTempoInicio(tempo);
-	n.setLow(n.getTempoInicio());
-	for (No no : n.getAdjacentes()) {
+        tempo++;
+        n.setCor(Cor.CINZA);
+        n.setTempoInicio(tempo);
+        n.setLow(n.getTempoInicio());
+        
+        //O(E)
+        for (No no : n.getAdjacentes()) {
 
-	    if (no.getCor() == Cor.BRANCO) {
-		no.setPai(n);
-		pontes(no);
-		n.setLow(Math.min(n.getLow(), no.getLow()));
-		if (no.getLow() > n.getTempoInicio()) {
-		    System.out.println("Entre " + no.getNome() + " e " + n.getNome() + " h� uma ponte ");
-		}
-	    } else {
-		if (no != n.getPai() && no.getTempoInicio() < n.getTempoInicio()) {
-		    n.setLow(Math.min(n.getLow(), no.getTempoInicio()));
-		}
-	    }
+            if (no.getCor() == Cor.BRANCO) {
+                no.setPai(n);
+                pontes(no);
+                n.setLow(Math.min(n.getLow(), no.getLow()));
+                if (no.getLow() > n.getTempoInicio()) {
+                    System.out.println("Entre " + no.getNome() + " e " + n.getNome() + " h� uma ponte ");
+                }
+            } else {
+                if (no != n.getPai() && no.getTempoInicio() < n.getTempoInicio()) {
+                    n.setLow(Math.min(n.getLow(), no.getTempoInicio()));
+                }
+            }
 
-	}
-	n.setCor(Cor.PRETO);
-	tempo++;
-	n.setTempoTermino(tempo);
+        }
+        n.setCor(Cor.PRETO);
+        tempo++;
+        n.setTempoTermino(tempo);
 
     }
 
+    //O( V + E )
     public void pontosArticulacao(No n) {
-	tempo++;
-	n.setCor(Cor.CINZA);
-	n.setTempoInicio(tempo);
-	n.setLow(n.getTempoInicio());
-	for (No no : n.getAdjacentes()) {
-	    if (no.getCor() == Cor.BRANCO) {
-		no.setPai(n);
-		pontosArticulacao(no);
-		if (n.getPai() == null) {
-		    System.out.println(n.getNome() + " � raiz");
-		    if (n.getFilhos().size() >= 2) {
-			System.out.println(n.getNome() + " � um ponto de articulacao ");
-		    }
-		} else {
-		    n.setLow(Math.min(n.getLow(), no.getLow()));
-		    if (no.getLow() >= n.getTempoInicio()) {
-			System.out.println(n.getNome() + " � um ponto de articulacao ");
-		    }
-		}
-	    } else {
-		if (no != n.getPai() && no.getTempoInicio() < n.getTempoInicio()) {
-		    n.setLow(Math.min(n.getLow(), no.getTempoInicio()));
-		}
-	    }
-	}
-	n.setCor(Cor.PRETO);
-	tempo++;
-	n.setTempoTermino(tempo);
+        tempo++;
+        n.setCor(Cor.CINZA);
+        n.setTempoInicio(tempo);
+        n.setLow(n.getTempoInicio());
+        //O(E)
+        for (No no : n.getAdjacentes()) {
+            if (no.getCor() == Cor.BRANCO) {
+                no.setPai(n);
+                pontosArticulacao(no);
+                if (n.getPai() == null) {
+                    System.out.println(n.getNome() + " � raiz");
+                    if (n.getFilhos().size() >= 2) {
+                        System.out.println(n.getNome() + " � um ponto de articulacao propriedade 1");
+                    }
+                } else {
+                    n.setLow(Math.min(n.getLow(), no.getLow()));
+                    if (no.getLow() >= n.getTempoInicio()) {
+                        System.out.println(n.getNome() + " � um ponto de articulacao propriedade 2 ");
+                    }
+                }
+            } else {
+                if (no != n.getPai() && no.getTempoInicio() < n.getTempoInicio()) {
+                    n.setLow(Math.min(n.getLow(), no.getTempoInicio()));
+                }
+            }
+        }
+        n.setCor(Cor.PRETO);
+        tempo++;
+        n.setTempoTermino(tempo);
     }
 
+    
+    /**
+     * O ( V )
+     */
     public static void reiniciaCores() {
-	for (No n : todosNos) {
-	    n.setCor(Cor.BRANCO);
-	}
+        for (No n : todosNos) {
+            n.setCor(Cor.BRANCO);
+        }
     }
 
+    /**
+     * O( V ) 
+     */
     public static void reiniciaPais() {
-	for (No n : todosNos) {
-	    n.setPai(null);
-	}
+        for (No n : todosNos) {
+            n.setPai(null);
+        }
     }
 
     public static void setTempo(int tempo) {
