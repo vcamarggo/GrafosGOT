@@ -12,7 +12,7 @@ import java.util.List;
 public class No {
     public static List<No> todosNos = new ArrayList<No>();
     private String nome;
-    private List<No> filhos;
+    private List<No> adjacentes;
     private Cor cor = Cor.BRANCO;
     private No pai;
     private int tempoInicio = 0;
@@ -21,12 +21,22 @@ public class No {
     private int distancia;
     private int low;
     private static int tempo;
+    private List<No> filhos;
 
     public No(int id, String nome) {
 
 	this.nome = nome;
 	this.id = id;
-	this.filhos = new ArrayList<No>();
+	this.adjacentes = new ArrayList<No>();
+        this.filhos = new ArrayList<No>();
+    }
+
+    public List<No> getFilhos() {
+        return filhos;
+    }
+
+    public void setFilhos(List<No> filhos) {
+        this.filhos = filhos;
     }
 
     public int getId() {
@@ -41,18 +51,18 @@ public class No {
 	this.low = low;
     }
     public void addFilho(No no) {
-	if (filhos == null) {
-	    filhos = new ArrayList<No>();
+	if (adjacentes == null) {
+	    adjacentes = new ArrayList<No>();
 	}
-	filhos.add(no);
+	adjacentes.add(no);
     }
 
     public String getNome() {
 	return nome;
     }
 
-    public List<No> getFilhos() {
-	return filhos;
+    public List<No> getAdjacentes() {
+	return adjacentes;
     }
 
     public Cor getCor() {
@@ -107,7 +117,7 @@ public class No {
 	No n = fila.remove();
 	while (n != null && !achou) {
 
-	    for (No no : n.getFilhos()) {
+	    for (No no : n.getAdjacentes()) {
 
 		if (no.cor == Cor.BRANCO) {
 		    no.setCor(Cor.CINZA);
@@ -145,9 +155,10 @@ public class No {
 	tempo++;
 	n.setCor(Cor.CINZA);
 	n.setTempoInicio(tempo);
-	for (No no : n.getFilhos()) {
+	for (No no : n.getAdjacentes()) {
 	    if (no.getCor() == Cor.BRANCO) {
 		no.pai = n;
+                n.getFilhos().add(no);
 		distanciaVisita(no);
 	    }
 	}
@@ -161,14 +172,14 @@ public class No {
 	n.setCor(Cor.CINZA);
 	n.setTempoInicio(tempo);
 	n.setLow(n.getTempoInicio());
-	for (No no : n.getFilhos()) {
+	for (No no : n.getAdjacentes()) {
 
 	    if (no.getCor() == Cor.BRANCO) {
 		no.setPai(n);
 		pontes(no);
 		n.setLow(Math.min(n.getLow(), no.getLow()));
 		if (no.getLow() > n.getTempoInicio()) {
-		    System.out.println("Entre " + no.getNome() + " e " + n.getNome() + " há uma ponte ");
+		    System.out.println("Entre " + no.getNome() + " e " + n.getNome() + " hï¿½ uma ponte ");
 		}
 	    } else {
 		if (no != n.getPai() && no.getTempoInicio() < n.getTempoInicio()) {
@@ -188,19 +199,19 @@ public class No {
 	n.setCor(Cor.CINZA);
 	n.setTempoInicio(tempo);
 	n.setLow(n.getTempoInicio());
-	for (No no : n.getFilhos()) {
+	for (No no : n.getAdjacentes()) {
 	    if (no.getCor() == Cor.BRANCO) {
 		no.setPai(n);
 		pontosArticulacao(no);
 		if (n.getPai() == null) {
-		    System.out.println(n.getNome() + " é raiz");
-		    if (no == n.getFilhos().get(1)) {
-			System.out.println(n.getNome() + " é um ponto de articulacao ");
+		    System.out.println(n.getNome() + " ï¿½ raiz");
+		    if (n.getFilhos().size() >= 2) {
+			System.out.println(n.getNome() + " ï¿½ um ponto de articulacao ");
 		    }
 		} else {
 		    n.setLow(Math.min(n.getLow(), no.getLow()));
 		    if (no.getLow() >= n.getTempoInicio()) {
-			System.out.println(n.getNome() + " é um ponto de articulacao ");
+			System.out.println(n.getNome() + " ï¿½ um ponto de articulacao ");
 		    }
 		}
 	    } else {

@@ -38,7 +38,7 @@ public class Principal {
 	String csvDivisor = ",";
 
 	try {
-	    br = new BufferedReader(new FileReader("./src/grafos/main/stormofswords.csv"));
+	    br = new BufferedReader(new FileReader(Principal.class.getResource("stormofswords.csv").getPath()));
 	    while ((linha = br.readLine()) != null) {
 
 		// le a primeira parte (target) e adiciona em uma hash com nome
@@ -71,12 +71,11 @@ public class Principal {
 	    }
 	    inicializaNos(matrizAdjacencia);
 	    listaAdjacencia = montaListaAdjacencia(matrizAdjacencia);
-	    printaListaAdjacenciaNome(No.todosNos);
-	    printaMatrizAdjacencia(matrizAdjacencia);
+	    //printaListaAdjacenciaNome(No.todosNos);
+	    //printaMatrizAdjacencia(matrizAdjacencia);
 
 	    // Linha de distancia entre 2 nomes
-	    System.out.println(
-		    "A distância é: " + listaAdjacencia.get(nomesCSV.get("Illyrio")).buscaLargura(nomesCSV.get("Jon")));
+	    //System.out.println( "A distï¿½ncia ï¿½: " + listaAdjacencia.get(nomesCSV.get("Illyrio")).buscaLargura(nomesCSV.get("Jon")));
 
 	    No.buscaProfundidade();
 	    No.setTempo(0);
@@ -87,9 +86,7 @@ public class Principal {
 	    No.reiniciaCores();
 	    No.todosNos.get(0).pontosArticulacao(No.todosNos.get(0));
 
-	    for (No n : No.todosNos) {
-		System.out.println(n.getNome() + " - " + n.getTempoInicio() + "/" + n.getTempoTermino());
-	    }
+            //printaTempoDescobertaEFinal();
 
 	} catch (Exception e) {
 	    e.printStackTrace();
@@ -140,9 +137,9 @@ public class Principal {
     public static void printaListaAdjacencia(List<No> list) {
 	for (int i = 0; i < nomes.size(); i++) {
 	    System.out.print(i);
-	    for (int j = 0; j < list.get(i).getFilhos().size(); j++) {
+	    for (int j = 0; j < list.get(i).getAdjacentes().size(); j++) {
 		System.out.print(" -> ");
-		System.out.print(list.get(i).getFilhos().get(j).getId());
+		System.out.print(list.get(i).getAdjacentes().get(j).getId());
 	    }
 	    System.out.println();
 	}
@@ -151,12 +148,18 @@ public class Principal {
     public static void printaListaAdjacenciaNome(List<No> list) {
 	for (int i = 0; i < nomes.size(); i++) {
 	    System.out.print(list.get(i).getNome());
-	    for (int j = 0; j < list.get(i).getFilhos().size(); j++) {
+	    for (int j = 0; j < list.get(i).getAdjacentes().size(); j++) {
 		System.out.print(" -> ");
-		System.out.print(list.get(i).getFilhos().get(j).getNome());
+		System.out.print(list.get(i).getAdjacentes().get(j).getNome());
 	    }
 	    System.out.println();
 	}
+    }
+
+    private static void printaTempoDescobertaEFinal() {
+            for (No n : No.todosNos) {
+		System.out.println(n.getNome() + " - " + n.getTempoInicio() + "/" + n.getTempoTermino());
+	    }
     }
 
 }
