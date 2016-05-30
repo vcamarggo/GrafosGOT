@@ -19,18 +19,22 @@ import grafos.arvore.No;
  */
 
 public class Principal {
-	// Hash de string e inteiro para armazenar nome e índice na matriz
+	// Hash de string e inteiro para armazenar nome e índice do personagem na
+	// matriz
 	private static Map<String, Integer> nomesCSV = new HashMap<String, Integer>();
 
+	// Lista com os nomes dos personagens (107 personagens)
 	private static List<String> nomes = new ArrayList<String>();
 
 	private static List<No> listaAdjacencia;
 
-	// Matriz de relação dos personagens
+	// Matriz de relação entre os personagens
 	private static int[][] matrizAdjacencia = new int[109][109]; // numero de
 	// pessoas
 	// diferentes
 	// na lista
+
+	private static Scanner scan;
 
 	public static void main(String[] args) {
 
@@ -44,14 +48,15 @@ public class Principal {
 			br = new BufferedReader(new FileReader(Principal.class.getResource("stormofswords.csv").getPath()));
 			while ((linha = br.readLine()) != null) {
 
-				// le a primeira parte (target) e adiciona em uma hash com nome
+				// le a primeira parte (source) e adiciona em uma hash com nome
 				// e posicao na matriz
 				String personagem1 = linha.split(csvDivisor)[0];
-				/*if (personagem1.equals("Source")) {
+				if (personagem1.equals("Source")) {
 					continue;
-				}*/
-				
-				//Se não houver chave com nome do personagem, ele ainda nao foi inserido na lista e na hash
+				}
+
+				// Se não houver chave com nome do personagem, ele ainda nao foi
+				// inserido na lista e na hash
 				if (!nomesCSV.containsKey(personagem1) && !personagem1.equals("Source")) {
 					nomesCSV.put(personagem1, enderecoElementoMatriz);
 					nomes.add(personagem1);
@@ -66,13 +71,13 @@ public class Principal {
 					nomesCSV.put(personagem2, enderecoElementoMatriz);
 					nomes.add(personagem2);
 					enderecoElementoMatriz++;
-					//System.out.println(personagem2);
+
 				}
 
 				// monta a matriz de adjacencia. Pega o índice dos personagens
 				// no hashMap e essa posição da matriz receberá 1 que significa
 				// que há relação entre os personagens
-				
+
 				// O( VÂ² )
 				if (enderecoElementoMatriz > 0) {
 					matrizAdjacencia[nomesCSV.get(personagem2)][nomesCSV.get(personagem1)] = 1;
@@ -86,18 +91,15 @@ public class Principal {
 			// printaListaAdjacenciaNome(No.todosNos);
 			// printaMatrizAdjacencia(matrizAdjacencia);
 
+			menu();
+			/*Scanner scan = new Scanner(System.in);
 			System.out.println("Nome 1: ");
-			Scanner scan = new Scanner(System.in);
-			String pers = scan.nextLine();
+			String personagem1 = scan.nextLine();
 			System.out.println("Nome 2: ");
-			String pers2 = scan.nextLine();
-			
+			String personagem2 = scan.nextLine();
+
 			System.out.println("A distância é: "
-					+ listaAdjacencia.get(nomesCSV.get(pers)).buscaLargura(nomesCSV.get(pers2)));
-			
-			// Linha de distancia entre 2 nomes
-			/*System.out.println("A distância é: "
-					+ listaAdjacencia.get(nomesCSV.get("Illyrio")).buscaLargura(nomesCSV.get("Jon")));*/
+					+ listaAdjacencia.get(nomesCSV.get(personagem1)).buscaLargura(nomesCSV.get(personagem2)));
 
 			No.buscaProfundidade();
 			No.setTempo(0);
@@ -106,9 +108,7 @@ public class Principal {
 			No.setTempo(0);
 			No.reiniciaPais();
 			No.reiniciaCores();
-			No.todosNos.get(0).pontosArticulacao(No.todosNos.get(0));
-			
-			
+			No.todosNos.get(0).pontosArticulacao(No.todosNos.get(0));*/
 
 			// printaTempoDescobertaEFinal();
 
@@ -169,7 +169,7 @@ public class Principal {
 	 * 
 	 * @param matrizAdjacencia
 	 */
-	
+
 	// Para cada personagem da lista 'nomes', cria-se um nó
 	public static void inicializaNos(int matrizAdjacencia[][]) {
 		for (int i = 0; i < nomes.size(); i++) {
@@ -219,4 +219,41 @@ public class Principal {
 		}
 	}
 
+	public static void menu() {
+		scan = new Scanner(System.in);
+
+		System.out.println("Selecione a opcao desejada: ");
+		System.out.println("1 - Distância entre dois personagens;");
+		System.out.println("2 - Pontes;");
+		System.out.println("3 - Pontos de articulacao;");
+		System.out.println("5 - Sair");
+
+		
+		switch (scan.nextInt()) {
+		case 1:
+			System.out.println("Nome 1: ");
+			String personagem1 = scan.next();
+			System.out.println("Nome 2: ");
+			String personagem2 = scan.next();
+
+			System.out.println("A distância é: "
+					+ listaAdjacencia.get(nomesCSV.get(personagem1)).buscaLargura(nomesCSV.get(personagem2)));
+			break;
+		case 2:
+			No.buscaProfundidade();
+			No.setTempo(0);
+			No.reiniciaCores();
+			No.todosNos.get(0).pontes(No.todosNos.get(0));
+			break;
+		case 3:
+			No.setTempo(0);
+			No.reiniciaPais();
+			No.reiniciaCores();
+			No.todosNos.get(0).pontosArticulacao(No.todosNos.get(0));
+			break;
+		default:
+			break;
+		}
+
+	}
 }
