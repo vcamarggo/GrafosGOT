@@ -206,7 +206,7 @@ public class No {
                 pontes(no);
                 n.setLow(Math.min(n.getLow(), no.getLow()));
                 if (no.getLow() > n.getTempoInicio()) {
-                    System.out.println("Entre " + no.getNome() + " e " + n.getNome() + " h� uma ponte ");
+                    System.out.println("Entre " + no.getNome() + " e " + n.getNome() + " ha uma ponte ");
                 }
             } else {
                 if (no != n.getPai() && no.getTempoInicio() < n.getTempoInicio()) {
@@ -233,14 +233,14 @@ public class No {
                 no.setPai(n);
                 pontosArticulacao(no);
                 if (n.getPai() == null) {
-                    System.out.println(n.getNome() + " � raiz");
+                    System.out.println(n.getNome() + " e raiz");
                     if (n.getFilhos().size() >= 2) {
-                        System.out.println(n.getNome() + " � um ponto de articulacao propriedade 1");
+                        System.out.println(n.getNome() + " e um ponto de articulacao propriedade 1");
                     }
                 } else {
                     n.setLow(Math.min(n.getLow(), no.getLow()));
                     if (no.getLow() >= n.getTempoInicio()) {
-                        System.out.println(n.getNome() + " � um ponto de articulacao propriedade 2 ");
+                        System.out.println(n.getNome() + " e um ponto de articulacao propriedade 2 ");
                     }
                 }
             } else {

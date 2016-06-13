@@ -88,29 +88,12 @@ public class Principal {
 
 			inicializaNos(matrizAdjacencia);
 			listaAdjacencia = montaListaAdjacencia(matrizAdjacencia);
-			// printaListaAdjacenciaNome(No.todosNos);
-			// printaMatrizAdjacencia(matrizAdjacencia);
+			
+			//printaListaAdjacenciaNome(No.todosNos);
+			//printaMatrizAdjacencia(matrizAdjacencia);
 
 			menu();
-			/*Scanner scan = new Scanner(System.in);
-			System.out.println("Nome 1: ");
-			String personagem1 = scan.nextLine();
-			System.out.println("Nome 2: ");
-			String personagem2 = scan.nextLine();
-
-			System.out.println("A distância é: "
-					+ listaAdjacencia.get(nomesCSV.get(personagem1)).buscaLargura(nomesCSV.get(personagem2)));
-
-			No.buscaProfundidade();
-			No.setTempo(0);
-			No.reiniciaCores();
-			No.todosNos.get(0).pontes(No.todosNos.get(0));
-			No.setTempo(0);
-			No.reiniciaPais();
-			No.reiniciaCores();
-			No.todosNos.get(0).pontosArticulacao(No.todosNos.get(0));*/
-
-			// printaTempoDescobertaEFinal();
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -178,7 +161,7 @@ public class Principal {
 	}
 
 	/**
-	 * O(VÂ²)
+	 * O(V²)
 	 * 
 	 * @param list
 	 */
@@ -194,7 +177,7 @@ public class Principal {
 	}
 
 	/**
-	 * O(VÂ²)
+	 * O(V²)
 	 * 
 	 * @param list
 	 */
@@ -223,10 +206,10 @@ public class Principal {
 		scan = new Scanner(System.in);
 
 		System.out.println("Selecione a opcao desejada: ");
-		System.out.println("1 - Distância entre dois personagens;");
+		System.out.println("1 - Distancia entre dois personagens;");
 		System.out.println("2 - Pontes;");
 		System.out.println("3 - Pontos de articulacao;");
-		System.out.println("5 - Sair");
+		System.out.println("4 - Sair");
 
 		
 		switch (scan.nextInt()) {
@@ -236,7 +219,7 @@ public class Principal {
 			System.out.println("Nome 2: ");
 			String personagem2 = scan.next();
 
-			System.out.println("A distância é: "
+			System.out.println("A distancia e: "
 					+ listaAdjacencia.get(nomesCSV.get(personagem1)).buscaLargura(nomesCSV.get(personagem2)));
 			break;
 		case 2:
@@ -244,12 +227,14 @@ public class Principal {
 			No.setTempo(0);
 			No.reiniciaCores();
 			No.todosNos.get(0).pontes(No.todosNos.get(0));
+			printaTempoDescobertaEFinal();
 			break;
 		case 3:
 			No.setTempo(0);
 			No.reiniciaPais();
 			No.reiniciaCores();
 			No.todosNos.get(0).pontosArticulacao(No.todosNos.get(0));
+			printaTempoDescobertaEFinal();
 			break;
 		default:
 			break;
